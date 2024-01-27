@@ -6,7 +6,6 @@
         if (stringValue.length >= 9) {
             return;
         }
-        console.log(number, stringValue);
         
         value = Number(String(value) + "" + number);
     }
@@ -16,21 +15,23 @@
     }
 
 	function handleKeydown(event: KeyboardEvent) {
-        event.preventDefault();
         const key = event.key;
         if (key === "Backspace") {
+            event.preventDefault();
             deleteNumber();
         } else if (key === "Enter") {
+            event.preventDefault();
             console.log("Submit");
         } else if (Number.isInteger(Number(key))) {
-            console.log(key, Number(key));
-            
+            event.preventDefault();
             addNumber(Number(key));
         }
 	}
 </script>
 <svelte:window on:keydown={handleKeydown} ></svelte:window>
-<div class="grid grid-cols-3 grid-rows-5">
+<input type="number" class="sr-only" aria-label="Number input" bind:value={value} />
+
+<div class="grid grid-cols-3 grid-rows-5" aria-hidden="true" aria-label="Number input window">
     <p class="col-span-3 text-center text-2xl my-1">{formattedValue}</p>
     {#each [1, 2, 3, 4, 5, 6, 7, 8, 9] as number}
         <button on:click={() => addNumber(number)}>{number}</button>

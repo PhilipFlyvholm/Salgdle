@@ -1,4 +1,4 @@
-<script>
-	import '../app.css';
+<script lang="ts">
+	import '../app.postcss';
 </script>
 <slot />
