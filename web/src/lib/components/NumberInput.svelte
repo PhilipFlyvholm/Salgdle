@@ -1,6 +1,7 @@
 <script lang="ts">
-    let value: number = 0;
-    $: formattedValue = new Intl.NumberFormat('da-DK', { style: 'currency', currency: 'DKK' }).format(value)
+    export let value: number = 0;
+    export let onSubmit: (value: number) => void = () => {};
+
     function addNumber(number: number) {
         const stringValue = String(value);
         if (stringValue.length >= 9) {
@@ -21,7 +22,7 @@
             deleteNumber();
         } else if (key === "Enter") {
             event.preventDefault();
-            console.log("Submit");
+            onSubmit(value)
         } else if (Number.isInteger(Number(key))) {
             event.preventDefault();
             addNumber(Number(key));
@@ -30,15 +31,13 @@
 </script>
 <svelte:window on:keydown={handleKeydown} ></svelte:window>
 <input type="number" class="sr-only" aria-label="Number input" bind:value={value} />
-
-<div class="grid grid-cols-3 grid-rows-5" aria-hidden="true" aria-label="Number input window">
-    <p class="col-span-3 text-center text-2xl my-1">{formattedValue}</p>
+<div class="grid grid-cols-3 grid-rows-4 mx-2 card p-2 w-full" aria-hidden="true" aria-label="Number input window">
     {#each [1, 2, 3, 4, 5, 6, 7, 8, 9] as number}
-        <button on:click={() => addNumber(number)}>{number}</button>
+        <button class="btn variant-glass" on:click={() => addNumber(number)}>{number}</button>
     {/each}
-    <button on:click={deleteNumber}>Delete</button>
-    <button on:click={() => addNumber(0)}>0</button>
+    <button class="btn variant-glass" on:click={deleteNumber}>Delete</button>
+    <button class="btn variant-glass" on:click={() => addNumber(0)}>0</button>
     
-    <button>Submit</button>
+    <button class="btn variant-filled-primary" on:click={() => onSubmit(value)}>Submit</button>
 </div>
 

@@ -1,0 +1,79 @@
+<script lang="ts">
+	import { formatCurrency } from '$lib/FormatUtil';
+	import type { Guess } from '$lib/GuessTypes';
+	import { getBoxes } from '$lib/GuessUtil';
+
+	export let guess: { type: 'guess'; guess: Guess } | { type: 'input'; value: number } | undefined =
+		undefined;
+
+	let formattedGuess: string = '';
+
+	$: {
+		if (guess === undefined) {
+			formattedGuess = '';
+		} else if (guess.type === 'guess') {
+			formattedGuess = formatCurrency(guess.guess.value);
+		} else {
+			formattedGuess = formatCurrency(guess.value);
+		}
+	}
+
+	function calculateRotation(correctPrice: number, userAnswer: number): number {
+		const angleRange = 90; // The range of rotation, from -90 to 90 degrees
+		const maxDifference = 1_000_000; // Maximum allowed difference for 0 degrees rotation
+
+		// Calculate the difference between correct price and user answer
+		const priceDifference = userAnswer - correctPrice;
+
+		// Calculate the rotation angle
+		let rotationAngle = (priceDifference / maxDifference) * angleRange;
+
+		// Ensure the angle is within the valid range (-90 to 90 degrees)
+		rotationAngle = Math.max(-angleRange, Math.min(angleRange, rotationAngle));
+
+		return rotationAngle;
+	}
+
+</script>
+
+<p
+	class="text-center card"
+	style={`grid-column: span ${guess !== undefined && guess.type === 'guess' ? 5 : 12} / span ${guess !== undefined && guess.type === 'guess' ? 5 : 12};`}
+>
+	{formattedGuess}
+</p>
+{#if guess !== undefined && guess.type === 'guess'}
+	<p class="text-center card col-span-2">
+		<span
+			class="block"
+			style={guess.guess.correct
+				? ''
+				: `transform: rotate(${calculateRotation(guess.guess.actual, guess.guess.value)}deg)`}
+		>
+			{guess.guess.correct ? '✅' : '➡️'}
+		</span>
+	</p>
+	<div class="text-center card col-span-5 flex justify-center items-center">
+		{#each getBoxes(guess.guess.actual, guess.guess.value) as box}
+			<div class={`box ${box}`}></div>
+		{/each}
+
+	</div>
+{/if}
+<style>
+	.box{
+		height: 50%;
+		aspect-ratio: 1;
+		margin: 0 0.1rem;
+		border-radius: 10rem;
+	}
+	.box.absent{
+		background-color: #d21b1b;
+	}
+	.box.present{
+		background-color: rgb(16, 126, 185);
+	}
+	.box.correct{
+		background-color: #10b981;
+	}
+</style>

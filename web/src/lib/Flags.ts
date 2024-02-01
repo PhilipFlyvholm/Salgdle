@@ -1,3 +1,3 @@
 export const flags = {
-    loadTodaysProperty: false
+    loadTodaysProperty: true
 }
