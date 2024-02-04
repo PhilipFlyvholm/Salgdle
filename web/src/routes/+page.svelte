@@ -2,10 +2,10 @@
 	import { flags } from '$lib/Flags';
 	import type { Property as PropertyType } from '$lib/PropertyPicker';
 	import NumberInput from '$lib/components/NumberInput.svelte';
-	import Property from '$lib/components/Property.svelte';
+	import Property from '$lib/components/Property/Property.svelte';
 	import { onMount } from 'svelte';
 	import type { Guess as GuessType } from '$lib/GuessTypes';
-	import GuessContainer from '$lib/components/GuessContainer.svelte';
+	import GuessContainer from '$lib/components/Guess/GuessContainer.svelte';
 	let property: PropertyType | undefined = undefined;
 	onMount(async () => {
 		if (!flags.loadTodaysProperty) return;

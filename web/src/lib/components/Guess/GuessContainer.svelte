@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Guess as GuessType } from '$lib/GuessTypes';
-	import Guess from '$lib/components/Guess.svelte';
+	import Guess from '$lib/components/Guess/Guess.svelte';
 	export let guesses: (GuessType | undefined)[];
 	export let nrOfGuesses: number;
 	export let currentGuess: number;
