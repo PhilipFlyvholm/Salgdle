@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { formatCurrency } from '$lib/FormatUtil';
 	import type { Property } from '$lib/PropertyPicker';
+	import PropertyImages from './PropertyImages.svelte';
 	import PropertyInfo from './PropertyInfo.svelte';
 	export let property: Property | undefined;
 	export let nrOfGuesses: number = 0;
@@ -9,7 +10,7 @@
 		boligtype: '',
 		postnr: '',
 		postnrby: '',
-		images: [],
+		images: [] as string[],
 		imageUrl: 'https://via.placeholder.com/150',
 		rooms: 0,
 		byggeaar: 0,
@@ -20,10 +21,13 @@
 		grundm2: 0,
 		mdlUdgift: { type: 'Ejerudgift', value: 0 },
 	};
+
+	$: allImages = data.imageUrl ? data.images.concat(data.imageUrl) : data.images;
 </script>
 
 <div class="card relative overflow-hidden">
-	<img src={data.images[0] || data.imageUrl} alt="" class="w-full aspect-video" />
+	<!---<img src={data.images[0] || data.imageUrl} alt="" class="w-full aspect-video" />-->
+	<PropertyImages images={allImages} />
 	<div
 		class="card p-3 w-full rounded-none flex gap-1 justify-around"
 	>

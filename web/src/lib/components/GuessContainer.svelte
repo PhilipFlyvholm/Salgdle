@@ -8,14 +8,12 @@
 
 <div class="grid grid-cols-12 grid-rows-5 gap-4 my-5">
 	{#each guesses as guess, i}
-		{#key 'guess' + i}
 			{#if guess}
-				<Guess guess={{ type: 'guess', guess: guess }} />
+				<Guess guess={{ type: 'guess', guess: guess }}/>
 			{:else if i === nrOfGuesses}
-				<Guess guess={{ type: 'input', value: currentGuess }} />
+				<Guess guess={{ type: 'input', value: currentGuess }}/>
 			{:else}
 				<Guess />
 			{/if}
-		{/key}
 	{/each}
 </div>

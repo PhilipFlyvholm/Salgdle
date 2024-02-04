@@ -48,7 +48,6 @@ export async function findProperty(page = 1): Promise<Property | null> {
 	}
 	const scoredData = data.map((item) => {
 		const score = item.imageFetched + item.liggetid;
-		//if(item.boligtype === 'Andelsbolig') score += 100;
 		return { ...item, score: score };
 	});
 	const sortedData = scoredData
@@ -56,10 +55,8 @@ export async function findProperty(page = 1): Promise<Property | null> {
 		.reverse()
 		.filter((item) => item.score == scoredData[0].score);
 	const randomIndex = Math.floor(Math.random() * sortedData.length);
-	console.log('sortedData', sortedData);
 	
 	const property = sortedData[randomIndex];
-//	console.log('property', property);
 
 	const propertyImages = await findExtraImages(property.boligaUniqueNumber);
 	const costOfOwnership = await getCostOfOwnership(property.boligaUniqueNumber);

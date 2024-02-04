@@ -33,47 +33,74 @@
 
 		return rotationAngle;
 	}
-
 </script>
 
-<p
-	class="text-center card"
-	style={`grid-column: span ${guess !== undefined && guess.type === 'guess' ? 5 : 12} / span ${guess !== undefined && guess.type === 'guess' ? 5 : 12};`}
->
-	{formattedGuess}
-</p>
-{#if guess !== undefined && guess.type === 'guess'}
-	<p class="text-center card col-span-2">
-		<span
-			class="block"
-			style={guess.guess.correct
-				? ''
-				: `transform: rotate(${calculateRotation(guess.guess.actual, guess.guess.value)}deg)`}
-		>
-			{guess.guess.correct ? '✅' : '➡️'}
-		</span>
+	<p
+		class="text-center card"
+		style={`grid-column: span ${guess !== undefined && guess.type === 'guess' ? 5 : 12} / span ${guess !== undefined && guess.type === 'guess' ? 5 : 12};`}
+	>
+		{formattedGuess}
 	</p>
-	<div class="text-center card col-span-5 flex justify-center items-center">
-		{#each getBoxes(guess.guess.actual, guess.guess.value) as box}
-			<div class={`box ${box}`}></div>
-		{/each}
+	{#if guess !== undefined && guess.type === 'guess'}
+		<p class="text-center card col-span-2">
+			<span
+				class="block transition-all duration-300 ease-in-out"
 
-	</div>
-{/if}
+				style={guess.guess.correct
+					? '--arrow-rotate: 0deg;'
+					: `--arrow-rotate: ${calculateRotation(guess.guess.actual, guess.guess.value)}deg;`}
+			>
+				{guess.guess.correct ? '✅' : '➡️'}
+			</span>
+		</p>
+		<div class="text-center card col-span-5 flex justify-center items-center">
+			{#each getBoxes(guess.guess.actual, guess.guess.value) as box, i}
+				<div class={`box ${box}`} style:animation-delay={i*100 + "ms"}></div>
+			{/each}
+		</div>
+	{/if}
+
 <style>
-	.box{
+	.box {
 		height: 50%;
 		aspect-ratio: 1;
 		margin: 0 0.1rem;
 		border-radius: 10rem;
+		animation: scale-in 0.5s;
+		animation-fill-mode: forwards;
+		scale: 0;
 	}
-	.box.absent{
+	.box.absent {
 		background-color: #d21b1b;
 	}
-	.box.present{
+	.box.present {
 		background-color: rgb(16, 126, 185);
 	}
-	.box.correct{
+	.box.correct {
 		background-color: #10b981;
+	}
+
+	.block{
+		animation: rotate-in 1s, scale-in 0.5s;
+		animation-fill-mode: forwards;
+		animation-timing-function: ease-out;
+	}
+
+	@keyframes rotate-in {
+		0% {
+			rotate: 0;
+		}
+		100% {
+			rotate: var(--arrow-rotate);
+		}
+	}
+
+	@keyframes scale-in {
+		0% {
+			scale: 0;
+		}
+		100% {
+			scale: 1;
+		}
 	}
 </style>
