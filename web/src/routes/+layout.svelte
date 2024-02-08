@@ -1,7 +1,14 @@
 <script lang="ts">
+	import Header from '$lib/components/Header.svelte';
+	import Statistics from '$lib/components/Overlays/Statistics.svelte';
 	import '../app.postcss';
-	import { LightSwitch } from '@skeletonlabs/skeleton';
+	import { AppShell } from '@skeletonlabs/skeleton';
 </script>
-<slot />
 
-<LightSwitch class="fixed top-1 md:bottom-1 right-1"/>
+<AppShell>
+	<svelte:fragment slot="header">
+		<Header />
+	</svelte:fragment>
+	<Statistics />
+	<slot />
+</AppShell>

@@ -6,6 +6,7 @@
 	import { onMount } from 'svelte';
 	import type { Guess as GuessType } from '$lib/GuessTypes';
 	import GuessContainer from '$lib/components/Guess/GuessContainer.svelte';
+	import { showStats } from '$lib/stores/ViewStore';
 	let property: PropertyType | undefined = undefined;
 	onMount(async () => {
 		if (!flags.loadTodaysProperty) return;
@@ -16,24 +17,41 @@
 
 	let currentGuess = 0;
 	let nrOfGuesses = 0;
-	const guesses: (GuessType | undefined)[] = [undefined, undefined, undefined, undefined, undefined];
+	const guesses: (GuessType | undefined)[] = [
+		undefined,
+		undefined,
+		undefined,
+		undefined,
+		undefined
+	];
+
 	function onSubmit(value: number) {
 		if (property === undefined) return;
 		if (nrOfGuesses >= 5) return;
 		if (value === 0) return;
 		const correct = value === property.udbudspris;
-		guesses[nrOfGuesses] = { value, correct: correct, actual: property.udbudspris};
+		guesses[nrOfGuesses] = { value, correct: correct, actual: property.udbudspris };
 		nrOfGuesses++;
 		currentGuess = 0;
+		if (correct || nrOfGuesses === 5) {
+			$showStats = true;
+			nrOfGuesses = 5;
+		}
 	}
 </script>
 
 <div
-	class="container lg:max-w-[50%] mx-auto p-1 flex flex-col items-center justify-between min-h-[100vh]"
+	class="container lg:max-w-[50%] mx-auto p-1 flex flex-col items-center justify-between h-full md:w-[50%]"
 >
-	<div class="w-full md:w-[80%]">
-		<Property {property} {nrOfGuesses} />
+	<Property {property} {nrOfGuesses} />
+	<div class="flex-auto w-full">
 		<GuessContainer {guesses} {nrOfGuesses} {currentGuess} />
+		<NumberInput bind:value={currentGuess} {onSubmit} />
 	</div>
-	<NumberInput bind:value={currentGuess} {onSubmit} />
 </div>
+
+<style>
+	:global(#page-content) {
+		height: 100%;
+	}
+</style>

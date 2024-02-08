@@ -3,19 +3,14 @@
 export function getBoxes(solution: number, guess: number): ('correct' | 'present' | 'absent')[] {
 	const splitSolution = solution.toString().split('').reverse();
 	const splitGuess = guess.toString().split('').reverse();
-	console.log('splitSolution', splitSolution);
-	console.log('splitGuess', splitGuess);
 	
 	const solutionCharsTaken = splitSolution.map(() => false);
 
 	let statuses = Array.from(Array(Math.max(solution.toString().length, guess.toString().length)));
 	for (let i = 0; i < splitGuess.length; i++) {
 		const letter = splitGuess[i];
-		console.log(letter, splitSolution[i]);
 		
 		if (letter === splitSolution[i]) {
-			console.log('correct', i);
-			
 			statuses[i] = 'correct';
 			solutionCharsTaken[i] = true;
 		}

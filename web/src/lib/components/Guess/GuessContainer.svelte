@@ -6,7 +6,7 @@
 	export let currentGuess: number;
 </script>
 
-<div class="grid grid-cols-12 grid-rows-5 gap-4 my-5">
+<div class="grid grid-cols-12 grid-rows-5 gap-4 my-5 w-full">
 	{#each guesses as guess, i}
 			{#if guess}
 				<Guess guess={{ type: 'guess', guess: guess }}/>

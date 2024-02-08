@@ -42,6 +42,7 @@
 		{formattedGuess}
 	</p>
 	{#if guess !== undefined && guess.type === 'guess'}
+		{@const boxes = getBoxes(guess.guess.actual, guess.guess.value)}
 		<p class="text-center card col-span-2">
 			<span
 				class="block transition-all duration-300 ease-in-out"
@@ -54,8 +55,11 @@
 			</span>
 		</p>
 		<div class="text-center card col-span-5 flex justify-center items-center">
-			{#each getBoxes(guess.guess.actual, guess.guess.value) as box, i}
+			{#each boxes as box, i}
 				<div class={`box ${box}`} style:animation-delay={i*100 + "ms"}></div>
+				{#if (((boxes.length-1) - i)  % 3) === 0 && i !== boxes.length - 1}
+					<div class="w-1"></div>
+				{/if}
 			{/each}
 		</div>
 	{/if}

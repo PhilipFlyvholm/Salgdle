@@ -5,10 +5,10 @@
 	export let images: string[] = [];
 </script>
 
-<Splide options={{ rewind: true }} aria-label="Ejendomsbilleder">
+<Splide options={{ rewind: true }} class={$$props.class} aria-label="Ejendomsbilleder">
     {#each images as image, i}
         <SplideSlide>
-            <img src={image} alt="Billede {i}" class="aspect-video w-full"/>
+            <img src={image} alt="Billede {i}" class="w-full md:h-full md:w-auto"/>
         </SplideSlide>
     {/each}
 </Splide>

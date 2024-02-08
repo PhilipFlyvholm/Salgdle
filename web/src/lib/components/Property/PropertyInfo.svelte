@@ -4,7 +4,7 @@
 	export let unknownText: string = '?';
 </script>
 
-<div class="flex flex-col">
+<div class="flex flex-col mb-1">
 	<small>{title}</small>
 	<h2 class="transition-all duration-100" class:blur-sm={!show}>
 		{#if show}
