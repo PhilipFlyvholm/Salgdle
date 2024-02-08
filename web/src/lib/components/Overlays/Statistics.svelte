@@ -2,7 +2,8 @@
 	import { fade } from 'svelte/transition';
 	import Spacer from '../Spacer.svelte';
 	import { showStats } from '$lib/stores/ViewStore';
-	import { getStats } from '$lib/stores/GameStore';
+	import { GameStatus, getStats, gameState, currentPropertyInfo } from '$lib/stores/GameStore';
+	import { formatCurrency } from '$lib/FormatUtil';
 </script>
 
 {#if $showStats}
@@ -12,7 +13,7 @@
 	>
 		<header class="card-header flex justify-between">
 			<h2 class="text-2xl">Statistik</h2>
-			<button class="text-2xl" on:click={() => $showStats = false}>&times;</button>
+			<button class="text-2xl" on:click={() => ($showStats = false)}>&times;</button>
 		</header>
 		<Spacer />
 		<div class="grid grid-cols-4 gap-5 my-1">
@@ -25,17 +26,19 @@
 				</div>
 			{/each}
 		</div>
-		<div class="flex flex-col justify-center text-center my-1">
-			<p>Dagens pris er:</p>
-			<p class="text-2xl">1.000.000 kr</p>
-		</div>
-		<Spacer />
-		<div class="flex justify-around text-center">
-			<div class="flex flex-col">
-				<p>Næste spil:</p>
-				<p class="text-xl">10:00:00</p>
+		{#if $gameState.status !== GameStatus.InProgess && $currentPropertyInfo !== undefined}
+			<div class="flex flex-col justify-center text-center my-1">
+				<p>Dagens pris er:</p>
+				<p class="text-2xl">{formatCurrency($currentPropertyInfo.udbudspris)}</p>
 			</div>
-			<button type="button">Del</button>
-		</div>
+			<Spacer />
+			<div class="flex justify-around text-center">
+				<div class="flex flex-col">
+					<p>Næste spil:</p>
+					<p class="text-xl">10:00:00</p>
+				</div>
+				<button type="button">Del</button>
+			</div>
+		{/if}
 	</div>
 {/if}

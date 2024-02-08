@@ -2,15 +2,22 @@ import type { Property } from '$lib/PropertyPicker';
 import { localStorageStore } from '@skeletonlabs/skeleton';
 import { get, writable } from 'svelte/store';
 
-export type PropertyInfo = ({
-    activeDate: undefined;
-} | {
-    activeDate: string;
-    property: Property;
-})
-export const currentPropertyInfo = writable<PropertyInfo>({activeDate: undefined});
+export const currentPropertyInfo = writable<Property | undefined>(undefined);
 
-export const gameStore = localStorageStore('game', {});
+
+export enum GameStatus {
+	InProgess,
+	Win,
+	Loss
+}
+export const gameState = localStorageStore('game', {
+	status: GameStatus.InProgess
+});
+
+export function setGameOver(win: boolean) {
+	gameState.set({ status: win ? GameStatus.Win : GameStatus.Loss});
+	updateStats(win);
+}
 
 type Stats = {
 	GamesPlayed: number;

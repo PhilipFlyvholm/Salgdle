@@ -33,10 +33,12 @@
 
 		return rotationAngle;
 	}
+
+	$: bgClass = guess == undefined ? 'variant-soft-surface' : '';
 </script>
 
 	<p
-		class="text-center card"
+		class="text-center card {bgClass}"
 		style={`grid-column: span ${guess !== undefined && guess.type === 'guess' ? 5 : 12} / span ${guess !== undefined && guess.type === 'guess' ? 5 : 12};`}
 	>
 		{formattedGuess}

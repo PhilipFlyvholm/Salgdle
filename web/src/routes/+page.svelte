@@ -7,12 +7,14 @@
 	import type { Guess as GuessType } from '$lib/GuessTypes';
 	import GuessContainer from '$lib/components/Guess/GuessContainer.svelte';
 	import { showStats } from '$lib/stores/ViewStore';
+	import { setGameOver, currentPropertyInfo } from '$lib/stores/GameStore';
 	let property: PropertyType | undefined = undefined;
 	onMount(async () => {
 		if (!flags.loadTodaysProperty) return;
 		const res = await fetch('/api/getProperty');
 		const json = await res.json();
 		property = json;
+		$currentPropertyInfo = property;
 	});
 
 	let currentGuess = 0;
@@ -35,6 +37,7 @@
 		currentGuess = 0;
 		if (correct || nrOfGuesses === 5) {
 			$showStats = true;
+			setGameOver(correct)
 			nrOfGuesses = 5;
 		}
 	}
