@@ -1,5 +1,5 @@
-import helloWorld from './helloWorld';
+import loadTodaysPuzzle from './loadTodaysPuzzle';
 
-export const functions = [helloWorld];
+export const functions = [loadTodaysPuzzle];
 
 export { inngest } from './client';
