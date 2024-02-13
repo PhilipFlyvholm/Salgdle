@@ -102,5 +102,17 @@ export const salgdleTheme: CustomThemeConfig = {
 		
 		
 	},
-	properties_dark: {}
+	properties_dark: {
+		// surface | #141a27 
+		"--color-surface-50": "220 221 223", // #dcdddf
+		"--color-surface-100": "208 209 212", // #d0d1d4
+		"--color-surface-200": "196 198 201", // #c4c6c9
+		"--color-surface-300": "161 163 169", // #a1a3a9
+		"--color-surface-400": "91 95 104", // #5b5f68
+		"--color-surface-500": "20 26 39", // #141a27
+		"--color-surface-600": "18 23 35", // #121723
+		"--color-surface-700": "15 20 29", // #0f141d
+		"--color-surface-800": "12 16 23", // #0c1017
+		"--color-surface-900": "10 13 19", // #0a0d13
+	}
 }

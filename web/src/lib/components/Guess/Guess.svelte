@@ -38,7 +38,7 @@
 </script>
 
 	<p
-		class="text-center card {bgClass}"
+		class="text-center card py-1 {bgClass}"
 		style={`grid-column: span ${guess !== undefined && guess.type === 'guess' ? 5 : 12} / span ${guess !== undefined && guess.type === 'guess' ? 5 : 12};`}
 	>
 		{formattedGuess}

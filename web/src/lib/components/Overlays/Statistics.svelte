@@ -4,12 +4,14 @@
 	import { showStats } from '$lib/stores/ViewStore';
 	import { GameStatus, getStats, gameState, currentPropertyInfo } from '$lib/stores/GameStore';
 	import { formatCurrency } from '$lib/FormatUtil';
+	import { onOutside } from '$lib/actions/onOutside';
 </script>
 
 {#if $showStats}
 	<div
 		transition:fade={{ duration: 300 }}
 		class="fixed top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] z-10 card py-5 px-10 rounded container flex flex-col transition-opacity"
+		use:onOutside={() => $showStats = false}
 	>
 		<header class="card-header flex justify-between">
 			<h2 class="text-2xl">Statistik</h2>

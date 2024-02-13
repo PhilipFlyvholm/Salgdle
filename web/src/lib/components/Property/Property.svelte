@@ -11,7 +11,7 @@
 		postnr: '',
 		postnrby: '',
 		images: [] as string[],
-		imageUrl: 'https://via.placeholder.com/150',
+		imageUrl: undefined,
 		rooms: 0,
 		byggeaar: 0,
 		liggetid: 0,
@@ -28,10 +28,12 @@
 			: data.images;
 </script>
 
-<div class="relative h-full w-full">
-	<div class="card max-h-full max-w-full m-0 flex flex-col md:flex-row overflow-hidden">
+<div class="flex items-center h-full w-full">
+	<div class="card max-h-full w-full m-0 flex flex-col md:flex-row overflow-hidden">
 		<!---<img src={data.images[0] || data.imageUrl} alt="" class="" />-->
-		<PropertyImages images={allImages} class="flex justify-center items-center" />
+		{#if allImages.length > 0}
+			<PropertyImages images={allImages} class="flex justify-center items-center" />
+		{/if}
 		<div class="grid grid-cols-3 md:grid-cols-1 gap-1 p-2 md:p-3 md:flex-none">
 			<PropertyInfo title="Lokation" show={property !== undefined}
 				>{data.postnr} {data.postnrby}</PropertyInfo

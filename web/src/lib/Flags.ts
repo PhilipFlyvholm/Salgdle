@@ -1,3 +1,4 @@
 export const flags = {
-    loadTodaysProperty: true
+    loadTodaysProperty: true,
+    overrideDBProperty: false,
 }
