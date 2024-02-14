@@ -1,7 +1,6 @@
 <script lang="ts">
 		import type { PageData } from './$types';
 	import { flags } from '$lib/Flags';
-	import type { Property as PropertyType } from '$lib/PropertyPicker';
 	import NumberInput from '$lib/components/NumberInput.svelte';
 	import Property from '$lib/components/Property/Property.svelte';
 	import { onMount } from 'svelte';
