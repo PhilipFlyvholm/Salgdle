@@ -1,10 +1,7 @@
 import { EventSchemas } from 'inngest';
 
-type DemoEventSent = {
-	name: 'demo/event.sent';
-	data: {
-		message: string;
-	};
+type LoadTodaysPuzzle = {
+	name: 'app/load-todays-puzzle';
 };
 
-export const schemas = new EventSchemas().fromUnion<DemoEventSent>();
+export const schemas = new EventSchemas().fromUnion<LoadTodaysPuzzle>();

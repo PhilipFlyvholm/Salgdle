@@ -7,7 +7,7 @@ import { PB_ADMIN, PB_PASS, PB_URL } from '$env/static/private';
 
 export default inngest.createFunction(
 	{ id: "load-todays-puzzle" },
-	{ cron: "TZ=Europe/Paris 0 0 * * * " },
+	{ event: "app/load-todays-puzzle"},
 	async ({step}) => {
 		const property = await step.run('fetching-boliga', async () =>{
 			console.log('Running load-todays-puzzle');
@@ -37,3 +37,4 @@ export default inngest.createFunction(
 		})
 	}
   );
+  
