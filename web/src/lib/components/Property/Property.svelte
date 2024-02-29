@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { formatCurrency } from '$lib/FormatUtil';
 	import type { Property } from '$lib/PropertyPicker';
+	import { GameStatus, gameState } from '$lib/stores/GameStore';
 	import PropertyImages from './PropertyImages.svelte';
 	import PropertyInfo from './PropertyInfo.svelte';
 	export let property: Property | undefined;
-	export let nrOfGuesses: number = 0;
 
 	$: data = property || {
 		boligtype: '',
@@ -26,12 +26,14 @@
 		data.imageUrl && !data.images.includes(data.imageUrl)
 			? data.images.concat(data.imageUrl)
 			: data.images;
+
+	$: nrOfGuesses = $gameState.status !== GameStatus.Loading ? $gameState.guesses?.length : 0;
 </script>
 
 <div class="flex items-center h-full w-full">
 	<div class="card max-h-full w-full m-0 flex flex-col md:flex-row overflow-hidden">
 		<!---<img src={data.images[0] || data.imageUrl} alt="" class="" />-->
-		{#if allImages.length > 0}
+		{#if allImages && allImages.length > 0}
 			<PropertyImages images={allImages} class="flex justify-center items-center" />
 		{/if}
 		<div class="grid grid-cols-3 md:grid-cols-1 gap-1 p-2 md:p-3 md:flex-none">

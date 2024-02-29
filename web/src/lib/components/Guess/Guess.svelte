@@ -2,6 +2,7 @@
 	import { formatCurrency } from '$lib/FormatUtil';
 	import type { Guess } from '$lib/GuessTypes';
 	import { getBoxes } from '$lib/GuessUtil';
+	import { currentPropertyInfo } from '$lib/stores/GameStore';
 
 	export let guess: { type: 'guess'; guess: Guess } | { type: 'input'; value: number } | undefined =
 		undefined;
@@ -35,6 +36,8 @@
 	}
 
 	$: bgClass = guess == undefined ? 'variant-soft-surface' : '';
+	$: actual = guess !== undefined && guess.type === 'guess' && $currentPropertyInfo !== undefined ? $currentPropertyInfo.udbudspris : 0;
+	$: correct = guess !== undefined && guess.type === 'guess' && guess.guess.value === actual;
 </script>
 
 	<p
@@ -44,16 +47,16 @@
 		{formattedGuess}
 	</p>
 	{#if guess !== undefined && guess.type === 'guess'}
-		{@const boxes = getBoxes(guess.guess.actual, guess.guess.value)}
+		{@const boxes = getBoxes(actual, guess.guess.value)}
 		<p class="text-center card col-span-2">
 			<span
 				class="block transition-all duration-300 ease-in-out"
 
-				style={guess.guess.correct
+				style={correct
 					? '--arrow-rotate: 0deg;'
-					: `--arrow-rotate: ${calculateRotation(guess.guess.actual, guess.guess.value)}deg;`}
+					: `--arrow-rotate: ${calculateRotation(actual, guess.guess.value)}deg;`}
 			>
-				{guess.guess.correct ? '✅' : '➡️'}
+				{correct ? '✅' : '➡️'}
 			</span>
 		</p>
 		<div class="text-center card col-span-5 flex justify-center items-center">

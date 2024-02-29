@@ -1,21 +1,51 @@
 import type { Property } from '$lib/PropertyPicker';
 import { localStorageStore } from '@skeletonlabs/skeleton';
 import { get, writable } from 'svelte/store';
+import type { Guess } from '$lib/GuessTypes';
 
 export const currentPropertyInfo = writable<Property | undefined>(undefined);
 
-
 export enum GameStatus {
+	Loading,
 	InProgess,
 	Win,
 	Loss
 }
-export const gameState = localStorageStore('game', {
-	status: GameStatus.InProgess
+
+export type GameState =
+	| {
+			status: GameStatus.Loading;
+			guesses: [];
+			gameId: string;
+	  }
+	| {
+			status: Exclude<GameStatus, GameStatus.Loading>;
+			guesses: Guess[];
+			gameId: string;
+	  };
+
+export const gameState = localStorageStore<GameState>('game', {
+	status: GameStatus.Loading,
+	guesses: [],
+	gameId: ''
 });
 
+export function startGame(gameId: string, property: Property) {
+	gameState.set({
+		status: GameStatus.InProgess,
+		guesses: [],
+		gameId
+	});
+	currentPropertyInfo.set(property);
+}
+
 export function setGameOver(win: boolean) {
-	gameState.set({ status: win ? GameStatus.Win : GameStatus.Loss});
+	if (get(gameState).status !== GameStatus.InProgess) return;
+	gameState.update((store) =>
+		store.status == GameStatus.InProgess
+			? { ...store, status: win ? GameStatus.Win : GameStatus.Loss }
+			: store
+	);
 	updateStats(win);
 }
 

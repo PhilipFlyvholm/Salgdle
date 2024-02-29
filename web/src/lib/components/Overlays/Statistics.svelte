@@ -4,30 +4,29 @@
 	import { showStats } from '$lib/stores/ViewStore';
 	import { GameStatus, getStats, gameState, currentPropertyInfo } from '$lib/stores/GameStore';
 	import { formatCurrency } from '$lib/FormatUtil';
-	import { onOutside } from '$lib/actions/onOutside';
-	import { onDestroy, onMount } from 'svelte';
+	import { onOutside } from '$lib/actions/OnOutside';
+	import { onMount } from 'svelte';
 
-	let nextGameInterval: NodeJS.Timeout | undefined = undefined;
 	let timeUntilNextGame = 0;
 	let nextGame = new Date();
 	onMount(() => {
 		nextGame.setHours(0, 0, 0, 0);
 		nextGame.setDate(nextGame.getDate() + 1);
-		nextGameInterval = setInterval(() => {
+		const nextGameInterval: NodeJS.Timeout | undefined = setInterval(() => {
 			const currentTime = new Date();
-			timeUntilNextGame = (nextGame.getTime() - currentTime.getTime())/1000;			
+			timeUntilNextGame = (nextGame.getTime() - currentTime.getTime()) / 1000;
 			if (timeUntilNextGame < 0) {
 				timeUntilNextGame = 0;
 				clearInterval(nextGameInterval);
 			}
 		}, 1000);
+		return () => {
+			if (nextGameInterval) {
+				clearInterval(nextGameInterval);
+			}
+		};
 	});
 
-	onDestroy(() => {
-		if (nextGameInterval) {
-			clearInterval(nextGameInterval);
-		}
-	});
 	function convertSecondsToDDMMSS(seconds: number) {
 		seconds %= 24 * 3600;
 		let hours = Math.floor(seconds / 3600);
@@ -60,7 +59,7 @@
 				</div>
 			{/each}
 		</div>
-		{#if $gameState.status !== GameStatus.InProgess && $currentPropertyInfo !== undefined}
+		{#if ($gameState.status == GameStatus.Win || $gameState.status == GameStatus.Loss) && $currentPropertyInfo !== undefined}
 			<div class="flex flex-col justify-center text-center my-1">
 				<p>Dagens pris er:</p>
 				<p class="text-2xl">{formatCurrency($currentPropertyInfo.udbudspris)}</p>

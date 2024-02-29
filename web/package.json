@@ -10,7 +10,8 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test": "vitest",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"inngest-dev": "npx inngest-cli@latest dev -u http://localhost:5173/api/inngest"
 	},
 	"devDependencies": {
 		"@skeletonlabs/skeleton": "^2.7.1",

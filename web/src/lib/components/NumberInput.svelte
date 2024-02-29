@@ -20,6 +20,7 @@
 
 	function handleKeydown(event: KeyboardEvent) {
         const key = event.key;
+        if(event.ctrlKey || event.metaKey) return;
         if (key === "Backspace") {
             event.preventDefault();
             deleteNumber();

@@ -6,6 +6,7 @@ export const load: PageLoad = async ({fetch}) => {
 		const res = await fetch('/api/getProperty');
 		const json = await res.json();
 		return {
-            property: json as Property | undefined
+            gameId: json.id,
+            property: json.property as Property | undefined
         }
 }; 

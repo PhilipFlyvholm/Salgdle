@@ -8,12 +8,12 @@ import { formatDate, getCurrentDate } from '$lib/FormatUtil';
 import { inngest } from '$lib/inngest';
 
 const maxTries = 5;
-async function getTodaysProperty(tries: number = 0): Promise<Property>{
+async function getTodaysProperty(tries: number = 0): Promise<{id: string, property: Property} | undefined>{
 	const pb = new PocketBase(PB_URL);
 	return pb.collection('property')
 		.getFirstListItem(`date="${formatDate(getCurrentDate())} 00:00:00.000Z"`)
 		.then((res) => {
-			return res.property;
+			return {id: res.id, property: (res.property as Property)};
 		})
 		.catch(async (err) => {
 			if (err instanceof ClientResponseError) {
@@ -34,14 +34,17 @@ async function getTodaysProperty(tries: number = 0): Promise<Property>{
 }
 
 export const GET: RequestHandler = async () => {
-	let property;
+	let result: {id: string, property: Property} | undefined;
 	if (flags.overrideDBProperty) {
-		property = await findProperty();
+		const property = await findProperty();
+		if (property) {
+			result = {id: new Date().toISOString(), property};
+		}
 	} else {
-		property = await getTodaysProperty();
+		result = await getTodaysProperty();
 	}
-	if (!property) {
+	if (!result) {
 		return error(404, 'Property not found');
 	}
-	return new Response(JSON.stringify(property));
+	return new Response(JSON.stringify(result));
 };

@@ -8,7 +8,7 @@
 <Splide options={{ rewind: true }} class={$$props.class} aria-label="Ejendomsbilleder">
     {#each images as image, i}
         <SplideSlide>
-            <img src={image} alt="Billede {i}" class="w-full md:h-full md:w-auto"/>
+            <img src={image} alt="Billede {i}" class="w-full md:h-full md:w-auto m-auto"/>
         </SplideSlide>
     {/each}
 </Splide>
