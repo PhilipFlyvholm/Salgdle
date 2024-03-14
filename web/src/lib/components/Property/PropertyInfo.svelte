@@ -6,11 +6,11 @@
 
 <div class="flex flex-col mb-1">
 	<small>{title}</small>
-	<h2 class="transition-all duration-100" class:blur-sm={!show}>
+	<p class="transition-all duration-100 text-sm md:text-md" class:blur-sm={!show}>
 		{#if show}
 			<slot />
 		{:else}
 			{unknownText}
 		{/if}
-	</h2>
+	</p>
 </div>

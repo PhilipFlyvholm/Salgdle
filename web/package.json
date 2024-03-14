@@ -44,9 +44,12 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@iconify/svelte": "^3.1.6",
 		"axios": "^1.6.6",
 		"inngest": "^3.12.0",
 		"pocketbase": "^0.21.1",
+		"scrapers": "file:../scrapers",
+		"skeleton-share": "^1.0.0",
 		"svelte-feather-icons": "^4.1.0"
 	}
 }

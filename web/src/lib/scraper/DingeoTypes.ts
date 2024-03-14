@@ -1,8 +1,8 @@
-export interface BoligaResponse {
-    items: BoligaResponseItem[]
+export interface DingeoResponse {
+    items: DingeoResponseItem[]
   }
   
-  export interface BoligaResponseItem {
+  export interface DingeoResponseItem {
     boligaUniqueNumber: string
     boligtype: string
     adresseid: string

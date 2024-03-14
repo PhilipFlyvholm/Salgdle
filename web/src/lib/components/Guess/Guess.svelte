@@ -6,7 +6,7 @@
 
 	export let guess: { type: 'guess'; guess: Guess } | { type: 'input'; value: number } | undefined =
 		undefined;
-
+	export let overriddenActual: number | undefined = undefined;
 	let formattedGuess: string = '';
 
 	$: {
@@ -36,40 +36,81 @@
 	}
 
 	$: bgClass = guess == undefined ? 'variant-soft-surface' : '';
-	$: actual = guess !== undefined && guess.type === 'guess' && $currentPropertyInfo !== undefined ? $currentPropertyInfo.udbudspris : 0;
+	$: actual =
+		overriddenActual !== undefined
+			? overriddenActual
+			: guess !== undefined && guess.type === 'guess' && $currentPropertyInfo !== undefined
+				? $currentPropertyInfo.udbudspris
+				: 0;
 	$: correct = guess !== undefined && guess.type === 'guess' && guess.guess.value === actual;
 </script>
 
-	<p
-		class="text-center card py-1 {bgClass}"
-		style={`grid-column: span ${guess !== undefined && guess.type === 'guess' ? 5 : 12} / span ${guess !== undefined && guess.type === 'guess' ? 5 : 12};`}
-	>
-		{formattedGuess}
-	</p>
-	{#if guess !== undefined && guess.type === 'guess'}
-		{@const boxes = getBoxes(actual, guess.guess.value)}
-		<p class="text-center card col-span-2 flex justify-center items-center">
-			<span
-				class="block transition-all duration-300 ease-in-out"
+<div
+	class="text-center card py-1 flex justify-center items-baseline text-sm {bgClass}"
+	style={`grid-column: span ${guess !== undefined && guess.type === 'guess' ? 5 : 12} / span ${guess !== undefined && guess.type === 'guess' ? 5 : 12};`}
+>
+	{#if guess !== undefined}
+		{#if guess.type === 'guess'}
+			{@const guessValue = guess.guess.value.toString()}
+			{@const boxes = getBoxes(actual, guess.guess.value)}
+			{#each guessValue.split('') as digit, i}
+				<span>{digit}</span>
 
-				style={correct
-					? '--arrow-rotate: 0deg;'
-					: `--arrow-rotate: ${calculateRotation(actual, guess.guess.value)}deg;`}
-			>
-				{correct ? '✅' : '➡️'}
-			</span>
-		</p>
-		<div class="text-center card col-span-5 flex justify-center items-center">
-			{#each boxes as box, i}
-				<div class={`box ${box}`} style:animation-delay={i*100 + "ms"}></div>
-				{#if (((boxes.length-1) - i)  % 3) === 0 && i !== boxes.length - 1}
-					<div class="w-1"></div>
+				{#if i === guessValue.length - 1}
+					<span class="text-xs">kr.</span>
+				{:else if (guessValue.length - i - 1) % 3 === 0}
+					<span class="text-xs">.</span>
 				{/if}
 			{/each}
-		</div>
+		{:else if guess.type === 'input'}
+			<span >{formattedGuess}</span>
+		{/if}
+	{:else}
+		<span>{formattedGuess}</span>
 	{/if}
+</div>
+{#if guess !== undefined && guess.type === 'guess'}
+	{@const boxes = getBoxes(actual, guess.guess.value)}
+	<p class="text-center card col-span-2 flex justify-center items-center">
+		<span
+			class="block transition-all duration-300 ease-in-out"
+			style={correct
+				? '--arrow-rotate: 0deg;'
+				: `--arrow-rotate: ${calculateRotation(actual, guess.guess.value)}deg;`}
+		>
+			{correct ? '✅' : '➡️'}
+		</span>
+	</p>
+	<div class="text-center card col-span-5 flex justify-center items-center">
+		{#each boxes as box, i}
+			<div class={`box ${box}`} style:animation-delay={i * 100 + 'ms'}></div>
+			{#if (boxes.length - 1 - i) % 3 === 0 && i !== boxes.length - 1}
+				<div class="w-1"></div>
+			{/if}
+		{/each}
+	</div>
+{/if}
 
 <style>
+	.guessedDigit::after {
+		content: '';
+		width: 0.8rem;
+		height: 0.15rem;
+		background-color: black;
+		border-radius: 1rem;
+		margin: 0 0.1rem;
+		display: block;
+	}
+	.guessedDigit.absent::after {
+		background-color: #d21b1b;
+	}
+	.guessedDigit.present::after {
+		background-color: rgb(16, 126, 185);
+	}
+	.guessedDigit.correct::after {
+		background-color: #10b981;
+	}
+
 	.box {
 		height: 50%;
 		aspect-ratio: 1;
@@ -89,8 +130,10 @@
 		background-color: #10b981;
 	}
 
-	.block{
-		animation: rotate-in 1s, scale-in 0.5s;
+	.block {
+		animation:
+			rotate-in 1s,
+			scale-in 0.5s;
 		animation-fill-mode: forwards;
 		animation-timing-function: ease-out;
 	}

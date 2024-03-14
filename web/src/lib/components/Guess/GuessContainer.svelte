@@ -4,7 +4,7 @@
 	export let currentGuess: number;
 </script>
 
-<div class="grid grid-cols-12 grid-rows-5 gap-4 my-5 w-full">
+<div class="grid grid-cols-12 grid-rows-5 gap-4 my-5 w-full {$$props.class}">
 	{#if $gameState.status !== GameStatus.Loading && $gameState.guesses !== undefined}
 		{#each $gameState.guesses as guess}
 			<Guess guess={{ type: 'guess', guess: guess }} />

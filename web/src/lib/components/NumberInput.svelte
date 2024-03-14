@@ -35,7 +35,7 @@
 </script>
 <svelte:window on:keydown={handleKeydown} ></svelte:window>
 <input type="number" class="sr-only" aria-label="Number input" bind:value={value} />
-<div class="grid grid-cols-3 grid-rows-4 mx-2 card p-2 w-full" aria-hidden="true" aria-label="Number input window">
+<div class="grid grid-cols-3 grid-rows-4 mx-2 card p-2 {$$props.class}" aria-hidden="true" aria-label="Number input window">
     {#each [1, 2, 3, 4, 5, 6, 7, 8, 9] as number}
         <button class="btn variant-glass" on:click|preventDefault={() => addNumber(number)}>{number}</button>
     {/each}
