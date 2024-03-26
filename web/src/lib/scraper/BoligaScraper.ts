@@ -51,3 +51,8 @@ export async function getCostOfOwnership(id: string) {
 		return { type: 'unknown', value: 0};
 	}
 }
+
+export async function isPropertyInactive(id: string){
+	const res = await getBoligaPage(id);
+	return res.includes('Boligen er ikke aktiv længere!')
+}
