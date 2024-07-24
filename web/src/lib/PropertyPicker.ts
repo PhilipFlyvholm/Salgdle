@@ -30,14 +30,27 @@ export async function findProperty(
 		return findProperty(page + 1, excludeIDs);
 	}
 
-	const sortedData = scoredData
+	let sortedData = scoredData
 		.sort((a, b) => a.score - b.score)
 		.reverse()
 		.filter((item) => item.score == scoredData[0].score);
 
 	const randomIndex = Math.floor(Math.random() * sortedData.length);
-
-	const property = sortedData[randomIndex];
+	let property = sortedData[randomIndex];
+	sortedData = sortedData.splice(randomIndex, 1);
+	const isInactive = await isPropertyInactive(property.boligaUniqueNumber);
+	while (isInactive) {
+		excludeIDs.add(property.boligaUniqueNumber);
+		if (sortedData.length === 0) {
+			return findProperty(page, excludeIDs);
+		}
+		const tmpProp = sortedData.pop()
+		if (tmpProp) {
+			property = tmpProp;
+		}else{
+			return findProperty(page, excludeIDs);
+		}
+	}
 
 	//console.log(agents);
 	let propertyImages: string[] = [];
@@ -53,10 +66,5 @@ export async function findProperty(
 		propertyImages = await findExtraImages(property.boligaUniqueNumber);
 	}
 	const costOfOwnership = await getCostOfOwnership(property.boligaUniqueNumber);
-	const isInactive = await isPropertyInactive(property.boligaUniqueNumber);
-	if (isInactive) {
-		excludeIDs.add(property.boligaUniqueNumber);
-		return findProperty(page, excludeIDs);
-	}
 	return { ...property, images: propertyImages, mdlUdgift: costOfOwnership };
 }

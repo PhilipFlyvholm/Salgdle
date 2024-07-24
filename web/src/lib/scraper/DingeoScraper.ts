@@ -27,14 +27,18 @@ function createrAPIUrl(page: number): string {
 
 export async function getDingeoData(page: number) {
 	const url = createrAPIUrl(page);
+    console.log(url);
+    
     const config:AxiosRequestConfig = { headers: { accept: 'application/json, text/plain, */*', 'user-agent': 'Mozilla/5.0' } };
 	const res = await axios
         .get<DingeoResponse>(url, config);
+    console.log(res.data.items);
+    
     if (res.data.items.length === 0) {
         throw new Error('No data found');
     }
     const data = res.data.items.filter(
-        (item) => item.byggeaar !== 0 && !item.imageUrl.includes('googleapis.com')
+        (item) => item.byggeaar !== 0  && (!item.imageUrl || !item.imageUrl.includes('googleapis.com'))
     );
     return data;
 }

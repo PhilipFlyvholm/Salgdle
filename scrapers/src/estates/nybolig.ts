@@ -9,7 +9,7 @@ export async function scrape(agentLink: string):Promise<string[]> {
   await page.click("#declineButton");
   const imageUrls: string[] = (
     await page.$$eval(".slider-image__image", (imgs) =>
-      imgs.map((img) => img.getAttribute("data-src"))
+      imgs.map((img) => img.getAttribute("src"))
     )
   ).filter(notEmpty);
   await browser.close();

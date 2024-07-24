@@ -41,10 +41,16 @@ function findMatchesByIdAndPattern(idValue: string, document: string): string[] 
 
 export async function getCostOfOwnership(id: string) {
 	const res = (await getBoligaPage(id)).replaceAll('.', '');
+	
 	const pattern = new RegExp('(Ejerudgift|Boligydelse): (\\d+) kr \\/ md', 'gmi');
 	const matches = res.matchAll(pattern);
 	if (matches) {
 		const match = matches.next();
+		if(match.done) {
+			return { type: 'unknown', value: 0 };
+		}
+		console.log(match);
+		
 		const type = match.value[1];
 		return {type: type, value: parseFloat(match.value[2])};
 	} else {
